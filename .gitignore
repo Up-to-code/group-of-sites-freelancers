@@ -1,0 +1,5 @@
+*.bak
+*.strip.bak
+*.bak-*
+hub.html.bak*
+hub.html.strip.bak

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ahmed Mansour — Profile Hub</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --card: #161b22;
+      --card-hover: #1c2128;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #c0444a;
+      --accent-soft: rgba(192, 68, 74, 0.28);
+      --dot-text: #fff;
+
+      --hero-tint: linear-gradient(180deg, rgba(13, 17, 23, 0.35), rgba(13, 17, 23, 0.92));
+    }
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --card: #f6f8fa;
+      --card-hover: #f0f3f6;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --muted: #656d76;
+      --accent: #bf3a41;
+      --accent-soft: rgba(191, 58, 65, 0.16);
+      --dot-text: #fff;
+      --hero-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.30), rgba(246, 248, 250, 0.96));
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .hero {
+      position: relative;
+      height: 168px;
+      background: var(--bg) url("bg.jpg") no-repeat center 42% / cover;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--hero-tint);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 928px;
+      margin: 0 auto;
+      padding: 22px 24px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .avatar {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--card);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .hero h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; }
+    .hero p { color: var(--muted); margin-top: 4px; font-size: 13.5px; }
+    .theme-btn {
+      position: absolute;
+      top: 14px; right: 20px;
+      z-index: 2;
+      display: inline-flex; align-items: center; gap: 7px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12.5px; font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color 0.15s ease;
+    }
+    .theme-btn:hover { border-color: var(--accent); }
+    .theme-btn .tgl { font-size: 14px; }
+
+    .wrap { max-width: 928px; margin: 0 auto; padding: 28px 24px 56px; }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+      flex: 1;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      border-left: 1px solid var(--border);
+    }
+    .stat:first-child { border-left: none; }
+    .stat .v { font-size: 20px; font-weight: 600; }
+    .stat.checked .v { color: var(--accent); }
+    .stat .l { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+
+
+    .group { margin-bottom: 26px; }
+    .group h2 {
+      font-size: 13px; font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .group h2 .badge {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 8px;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.1s ease;
+    }
+    .row:last-child { border-bottom: none; }
+    .row:hover { background: var(--card-hover); }
+    .icon {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      background: var(--accent-soft);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--accent);
+    }
+    .icon img { width: 100%; height: 100%; object-fit: cover; }
+    .meta { flex: 1; min-width: 0; }
+    .meta .name { font-size: 14px; font-weight: 600; }
+    .meta .url { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .tilde-dot {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.15s ease;
+    }
+    .tilde-dot:hover { border-color: var(--accent); color: var(--accent); }
+    .tilde-dot.on {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--dot-text);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .star-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 15px;
+      line-height: 1;
+      transition: all 0.15s ease;
+    }
+    .star-btn:hover { border-color: #e3b341; color: #e3b341; }
+    .star-btn.on {
+      color: #e3b341;
+      border-color: #e3b341;
+      background: rgba(227, 179, 65, 0.14);
+      box-shadow: 0 0 0 3px rgba(227, 179, 65, 0.12);
+    }
+    .arrow2 { color: var(--muted); font-size: 14px; }
+    .row:hover .arrow2 { color: var(--accent); }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .toolbar .hint { color: var(--muted); font-size: 12.5px; }
+    .filter-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 7px 14px;
+      font-size: 12.5px; font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .filter-btn .cnt { color: var(--muted); font-weight: 500; }
+    .filter-btn:hover { border-color: var(--accent); }
+    .filter-btn.on {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .filter-btn.on .cnt { color: var(--accent); }
+    .render-empty {
+      background: var(--card);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 28px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    footer { margin-top: 34px; color: var(--muted); font-size: 12.5px; line-height: 1.7; }
+    footer code { background: var(--card); border: 1px solid var(--border); padding: 1px 6px; border-radius: 6px; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <button id="themeBtn" class="theme-btn" type="button" title="Toggle light / dark">
+      <span class="tgl">☀</span><span class="lbl"></span>
+    </button>
+    <div class="hero-inner">
+      <img class="avatar" src="https://avatars.githubusercontent.com/Up-to-code" alt=""
+           onerror="this.outerHTML='&lt;div class=&quot;avatar&quot; style=&quot;align-items:center;justify-content:center;display:flex;background:var(--card)&quot;&gt;AM&lt;/div&gt;'" />
+      <div>
+<span class="brand">⚑ Up to code — maintained.</span> <!-- bumped: this line starts node.js TODO -->
+        <h1>Ahmed Mansour</h1>
+        <p>Every freelance &amp; identity profile in one place — maintained, kept up to code.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <main>
+      
+      <div class="toolbar">
+        <button id="favFilterBtn" class="filter-btn" type="button" title="Show only your favorite sites">☆ <span class="lbl">Favorites</span> <span class="cnt"></span></button>
+        <span class="hint">Star your best sites with ☆, then filter to see just them.</span>
+      </div>
+      <div id="groups"></div>
+    </main>
+    <footer>
+      <p>Open any of these sites in this browser and it's counted automatically, or tap the dot to check a day in manually. Star your best sites and use <code>☆ Favorites</code> to filter. Data lives in <code>chrome.storage</code> — local to this browser.</p>
+    </footer>
+  </div>
+
+  <script>
+    const LINKS = [
+      {
+        group: "Global",
+        links: [
+          { name: "Malt", url: "https://www.malt.com/profile/ahmedmansour", host: "www.malt.com" },
+          { name: "Scalable Path", url: "https://www.scalablepath.com/profile/ahmed.mansour", host: "www.scalablepath.com" },
+          { name: "Twine", url: "https://www.twine.net/user1802540", host: "www.twine.net" },
+          { name: "Hubstaff Talent", url: "https://hubstafftalent.net/profiles/ahmed-mansour-2", host: "hubstafftalent.net" },
+          { name: "Kwork", url: "https://kwork.com/user/uptocodejs", host: "kwork.com" },
+          { name: "Flexiple", url: "https://app.flexiple.com/talent/edit-profile", host: "app.flexiple.com" }
+        ]
+      },
+      {
+        group: "MENA",
+        links: [
+          { name: "Rebhy", url: "https://rebhy.com/freelancers/ahmed_mansour", host: "rebhy.com" },
+          { name: "Ureed", url: "https://app.ureed.com/profile/ahmed-271414", host: "app.ureed.com" },
+          { name: "Skilgy", url: "https://skilgy.com/resume/ahmed-ytkjd6-agentic-engineer-full-stack-web-cairo-egypt/", host: "skilgy.com" },
+          { name: "Nafezly", url: "https://nafezly.com/u/ahmed_mansour_", host: "nafezly.com" }
+        ]
+      },
+      {
+        group: "Identity",
+        links: [
+          { name: "GitHub", url: "https://github.com/Up-to-code", host: "github.com" },
+          { name: "Portfolio", url: "https://ahmed-macos-portfolio.vercel.app/", host: "ahmed-macos-portfolio.vercel.app" },
+          { name: "LinkedIn", url: "https://www.linkedin.com/in/ahmed-al-refai-6a491a237/", host: "www.linkedin.com" }
+        ]
+      }
+    ];
+
+    const pad = (n) => String(n).padStart(2, "0");
+    const keyOf = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    const todayStr = () => keyOf(new Date());
+    const norm = (h) => h.replace(/^www\./, "");
+
+    const extStorage = typeof chrome !== "undefined" && chrome.storage && chrome.storage.local ? chrome.storage.local : null;
+    let checks = {};
+    let favs = {};
+    let favFilter = false;
+
+    function loadTheme(cb) {
+      const done = (t) => { if (!t) t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"; cb(t); };
+      if (extStorage) extStorage.get({ theme: "" }, (res) => done(res.theme));
+      else { try { done(localStorage.getItem("theme") || ""); } catch { done(""); } }
+    }
+    function saveTheme(t) {
+      if (extStorage) extStorage.set({ theme: t });
+      else { try { localStorage.setItem("theme", t); } catch {} }
+    }
+    function applyTheme(t) {
+      document.documentElement.dataset.theme = t;
+      const tgl = document.querySelector("#themeBtn .tgl");
+      const lbl = document.querySelector("#themeBtn .lbl");
+      tgl.textContent = t === "light" ? "☾" : "☀";
+      lbl.textContent = t === "light" ? "Dark" : "Light";
+      document.getElementById("themeBtn").title = t === "light" ? "Switch to dark mode" : "Switch to light mode";
+    }
+
+    function loadChecks(cb) {
+      if (extStorage) extStorage.get({ checks: {} }, (res) => cb(res.checks || {}));
+      else {
+        try { cb(JSON.parse(localStorage.getItem("checks") || "{}")); }
+        catch { cb({}); }
+      }
+    }
+    function saveChecks(checks, cb) {
+      if (extStorage) extStorage.set({ checks }, () => cb && cb(checks));
+      else { localStorage.setItem("checks", JSON.stringify(checks)); cb && cb(checks); }
+    }
+    function loadFavs(cb) {
+      if (extStorage) extStorage.get({ favorites: {} }, (res) => cb(res.favorites || {}));
+      else {
+        try { cb(JSON.parse(localStorage.getItem("favorites") || "{}")); }
+        catch { cb({}); }
+      }
+    }
+    function saveFavs(favs, cb) {
+      if (extStorage) extStorage.set({ favorites: favs }, () => cb && cb(favs));
+      else { localStorage.setItem("favorites", JSON.stringify(favs)); cb && cb(favs); }
+    }
+    function toggleFav(key) {
+      loadFavs((f) => {
+        if (f[key]) delete f[key]; else f[key] = true;
+        favs = f;
+        saveFavs(favs, () => loadChecks((c) => { checks = c; render(); }));
+      });
+    }
+    function render() {
+      const totalStarred = LINKS.reduce((a, g) => a + g.links.filter((l) => favs[norm(l.host)]).length, 0);
+      const cnt = document.querySelector("#favFilterBtn .cnt");
+      cnt.textContent = totalStarred ? "(" + totalStarred + ")" : "";
+      const btn = document.getElementById("favFilterBtn");
+      btn.classList.toggle("on", favFilter);
+      btn.querySelector(".lbl").textContent = favFilter ? "Favorites on" : "Favorites";
+      renderGroups(checks);
+    }
+    function recordVisit(key, delta) {
+      loadChecks((c) => {
+        checks = c;
+        const t = todayStr();
+        checks[key] = checks[key] || {};
+        const v = (checks[key][t] || 0) + delta;
+        if (v > 0) checks[key][t] = v; else delete checks[key][t];
+        if (!Object.keys(checks[key]).length) delete checks[key];
+        saveChecks(checks, render);
+      });
+    }
+
+
+
+
+    function renderGroups(checks) {
+      const groups = document.getElementById("groups");
+      const t = todayStr();
+      groups.innerHTML = "";
+      let shown = 0;
+
+      for (const { group, links } of LINKS) {
+        const visible = links.filter((l) => !favFilter || favs[norm(l.host)]);
+        if (!visible.length) continue;
+        shown += visible.length;
+
+        const section = document.createElement("section");
+        section.className = "group";
+        const h2 = document.createElement("h2");
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = visible.length;
+        h2.appendChild(document.createTextNode(group + " "));
+        h2.appendChild(badge);
+        section.appendChild(h2);
+
+        const panel = document.createElement("div");
+        panel.className = "panel";
+
+        for (const { name, url, host } of visible) {
+          const key = norm(host);
+          const todayCheck = checks[key] ? checks[key][t] || 0 : 0;
+          const isFav = !!favs[key];
+
+          const row = document.createElement("a");
+          row.className = "row";
+          row.href = url;
+          row.target = "_blank";
+          row.rel = "noopener noreferrer";
+          row.addEventListener("click", () => recordVisit(key, 1));
+
+          const icon = document.createElement("div");
+          icon.className = "icon";
+          icon.innerHTML =
+            '<img src="https://www.google.com/s2/favicons?domain=' + encodeURIComponent(host) + '&sz=64" alt="" onerror="this.outerHTML=&quot;<span>' + name.charAt(0) + '</span>&quot;" />';
+
+          const meta = document.createElement("div");
+          meta.className = "meta";
+          const nameEl = document.createElement("div");
+          nameEl.className = "name";
+          nameEl.textContent = name;
+          const urlEl = document.createElement("div");
+          urlEl.className = "url";
+          urlEl.textContent = url.replace(/^https?:\/\//, "");
+          meta.appendChild(nameEl);
+          meta.appendChild(urlEl);
+
+          const actions = document.createElement("div");
+          actions.className = "actions";
+          const star = document.createElement("button");
+          star.type = "button";
+          star.className = "star-btn" + (isFav ? " on" : "");
+          star.textContent = isFav ? "★" : "☆";
+          star.title = isFav ? "Unfavorite this site" : "Favorite this site";
+          star.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleFav(key);
+          });
+          const dot = document.createElement("button");
+          dot.type = "button";
+          dot.className = "tilde-dot" + (todayCheck > 0 ? " on" : "");
+          dot.textContent = todayCheck > 0 ? "✓" : "";
+          dot.title = todayCheck > 0 ? `Checked today (${todayCheck}×) — tap to uncheck` : "Tap to check today";
+          dot.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            recordVisit(key, todayCheck > 0 ? -1 : 1);
+          });
+          const arrow = document.createElement("span");
+          arrow.className = "arrow2";
+          arrow.textContent = "↗";
+          actions.appendChild(star);
+          actions.appendChild(dot);
+          actions.appendChild(arrow);
+
+          row.appendChild(icon);
+          row.appendChild(meta);
+          row.appendChild(actions);
+          panel.appendChild(row);
+        }
+        section.appendChild(panel);
+        groups.appendChild(section);
+      }
+
+      if (favFilter && !shown) {
+        const empty = document.createElement("div");
+        empty.className = "render-empty";
+        empty.innerHTML =
+          '<div style="font-size:22px;margin-bottom:6px;">★</div>' +
+          "No favorites yet — tap the ☆ on a site to mark it as one of your best, then filter again.";
+        groups.appendChild(empty);
+      }
+    }
+
+    document.getElementById("themeBtn").addEventListener("click", () => {
+      const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+      applyTheme(next);
+      saveTheme(next);
+    });
+
+    document.getElementById("favFilterBtn").addEventListener("click", () => {
+      favFilter = !favFilter;
+      render();
+    });
+
+    loadTheme((theme) => {
+      applyTheme(theme);
+      loadFavs((f) => {
+        favs = f;
+        loadChecks((c) => {
+          checks = c;
+          render();
+        });
+      });
+    });
+    window.addEventListener("focus", () => loadChecks((c) => { checks = c; render(); }));
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") loadChecks((c) => { checks = c; render(); });
+    });
+  </script>
+</body>
+</html>

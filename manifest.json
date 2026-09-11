@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "Ahmed's Profile Hub",
+  "version": "2.0.0",
+  "description": "Every live freelance & identity profile in one tab, with GitHub-style visit analytics across all platforms.",
+  "action": {
+    "default_title": "Open Profile Hub"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://malt.com/*",
+        "*://www.malt.com/*",
+        "*://scalablepath.com/*",
+        "*://www.scalablepath.com/*",
+        "*://twine.net/*",
+        "*://www.twine.net/*",
+        "*://hubstafftalent.net/*",
+        "*://www.hubstafftalent.net/*",
+        "*://kwork.com/*",
+        "*://www.kwork.com/*",
+        "*://app.flexiple.com/*",
+        "*://rebhy.com/*",
+        "*://www.rebhy.com/*",
+        "*://app.ureed.com/*",
+        "*://skilgy.com/*",
+        "*://www.skilgy.com/*",
+        "*://nafezly.com/*",
+        "*://www.nafezly.com/*",
+        "*://github.com/*",
+        "*://www.github.com/*",
+        "*://ahmed-macos-portfolio.vercel.app/*",
+        "*://linkedin.com/*",
+        "*://www.linkedin.com/*"
+      ],
+      "js": ["record.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
