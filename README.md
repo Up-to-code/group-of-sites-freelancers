@@ -27,3 +27,7 @@ A Manifest V3 Chrome extension that opens every live freelance &amp; identity pr
 - `bg.jpg` — hero background (dimmed city / coastline).
 
 All data is stored in `chrome.storage.local` (this browser only) — no network calls, nothing leaves the browser.
+
+## Project links
+
+[Source](https://github.com/Up-to-code/group-of-sites-freelancers) · [Issues](https://github.com/Up-to-code/group-of-sites-freelancers/issues) · [Public project directory](https://github.com/qentrah/.github/blob/main/profile/PROJECTS.md)
